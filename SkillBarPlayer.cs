@@ -345,6 +345,12 @@ public class SkillBarPlayer : ModPlayer
 			return;
 		}
 
+		if (SkillBarBlockedItems.IsBlocked(template)) {
+			if (Player.whoAmI == Main.myPlayer)
+				Main.NewText(Language.GetTextValue("Mods.SkillBar.BlockedItem"), Color.OrangeRed);
+			return;
+		}
+
 		if (!SkillBarItemUse.IsEligibleForSkillBar(template)) {
 			if (Player.whoAmI == Main.myPlayer)
 				Main.NewText(Language.GetTextValue("Mods.SkillBar.NotUsable"), Color.OrangeRed);

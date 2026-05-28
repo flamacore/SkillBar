@@ -15,6 +15,7 @@ Keybinds: {
 
 DragHint: Drag to move skill bar
 NotUsable: That item cannot be placed on the skill bar.
+BlockedItem: Yoyos and flails cannot be used from the skill bar. Use your hotbar for those weapons.
 NoResources: Not enough mana or materials to use that skill.
 Assigned: Assigned {0} to skill bar.
 ShiftAssignHint: Shift+click inventory items to assign them to the skill bar. Shift+click a filled slot to copy it to the next empty slot.

@@ -17,6 +17,9 @@ public static class SkillBarItemUse
 		if (item == null || item.IsAir)
 			return false;
 
+		if (SkillBarBlockedItems.IsBlocked(item))
+			return false;
+
 		return item.useStyle > ItemUseStyleID.None
 			|| item.shoot > ProjectileID.None
 			|| item.createTile > -1

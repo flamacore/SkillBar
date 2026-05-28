@@ -208,6 +208,12 @@ public static class SkillBarUI
 		if (source.IsAir)
 			return false;
 
+		if (SkillBarBlockedItems.IsBlocked(source)) {
+			SoundEngine.PlaySound(SoundID.MenuTick);
+			Main.NewText(Language.GetTextValue("Mods.SkillBar.BlockedItem"), Color.OrangeRed);
+			return false;
+		}
+
 		if (!SkillBarItemUse.IsEligibleForSkillBar(source)) {
 			SoundEngine.PlaySound(SoundID.MenuTick);
 			Main.NewText(Language.GetTextValue("Mods.SkillBar.NotUsable"), Color.OrangeRed);

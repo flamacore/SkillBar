@@ -1,1 +1,21 @@
-A draggable skill bar for spells, summons, sentries, ropes, blocks, and other usable items. Assign items to slots, then press the bound key to use them toward your cursor — including placing tiles like rope at the spot you aim at (within normal placement reach).
+Skill Bar adds a draggable 10-slot bar for quick access to items without cluttering your main hotbar.
+
+Slots are bookmarks only — items stay in your inventory. Press a bound key or click a slot to use that item toward your cursor, just like the normal hotbar.
+
+SUPPORTED ITEMS
+• Weapons, spells, and summons (vanilla-accurate shooting)
+• Pickaxes, axes, and hammers
+• Blocks, platforms, rope, and walls
+• Potions, food, and buff drinks (consumes from inventory; slot clears when empty)
+• Magic Mirror, Cell Phone, boss summons, and similar usable items
+
+CONTROLS
+• Assign: left-click a slot with an item, or Shift+click from inventory
+• Use: Z X C V B N M , . / by default (configurable), middle-click, or Alt+click
+• Move bar: drag the hand icon on the left
+• Clear slot: right-click
+• Copy bookmark: Shift+click a filled slot
+
+Configure keys and options under Mod Configuration → Skill Bar. Bar position and bookmarks save per character. Client-side UI; works in multiplayer.
+
+Default slot 1 key: Z
