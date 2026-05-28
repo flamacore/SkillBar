@@ -29,10 +29,8 @@ Mods note: Should be compatible with any mod item really but obviously can't tes
 [list]
 [*]Weapons, spells, and summons (vanilla-accurate shooting)
 [*]Pickaxes, axes, and hammers
-[*]Blocks, platforms, rope, and walls
 [*]Potions, food, and buff drinks (consumes from inventory; slot clears when empty)
 [*]Magic Mirror, Cell Phone, boss summons, and similar usable items
-[*]Channel weapons (flamethrowers, drills) — [b]hold[/b] the item bar key while spraying
 [/list]
 
 [h2]Not supported / known issues[/h2]
@@ -41,6 +39,8 @@ Mods note: Should be compatible with any mod item really but obviously can't tes
 [*]Yoyos and flails / maces (Sunfury, etc.) — use your hotbar for those weapons
 [*][b]Melee weapons[/b] — often do not work; melee combat is not this mod's main focus
 [*][b]Controller / gamepad[/b] — not tested; use keyboard and mouse
+[*]Most blocks, platforms, rope, and walls don't work, not intended either
+[*]Channel weapons (flamethrowers, drills) also not supported
 [/list]
 
 [hr][/hr]
