@@ -25,7 +25,7 @@ With Item Bar, press one key — the summon is used toward your cursor while you
 [hr][/hr]
 
 [h2]Supported items[/h2]
-
+Mods note: Should be compatible with any mod item really but obviously can't test all of it. Give it a go, chances are it will just be fine :)
 [list]
 [*]Weapons, spells, and summons (vanilla-accurate shooting)
 [*]Pickaxes, axes, and hammers
