@@ -16,7 +16,7 @@ public static class SkillBarUI
 {
 	public const int SlotSize = 44;
 	public const int SlotPadding = 4;
-	public const int DragHandleHeight = 14;
+	public const int DragHandleSize = 18;
 
 	private static bool _prevMouseLeft;
 	private static bool _prevMouseRight;
@@ -24,12 +24,12 @@ public static class SkillBarUI
 
 	public static float GetBarWidth()
 	{
-		return SkillBar.SlotCount * (SlotSize + SlotPadding) - SlotPadding;
+		return DragHandleSize + SlotPadding + SkillBar.SlotCount * (SlotSize + SlotPadding) - SlotPadding;
 	}
 
 	public static float GetBarHeight()
 	{
-		return DragHandleHeight + SlotSize + 4;
+		return SlotSize;
 	}
 
 	public static Point MousePoint => new(Main.mouseX, Main.mouseY);
@@ -37,19 +37,15 @@ public static class SkillBarUI
 	public static Rectangle GetDragHandle(SkillBarPlayer sb)
 	{
 		sb.EnsureDefaultPosition();
-		int width = (int)GetBarWidth();
-		return new Rectangle(
-			(int)sb.BarScreenPosition.X,
-			(int)sb.BarScreenPosition.Y,
-			width,
-			DragHandleHeight);
+		int y = (int)(sb.BarScreenPosition.Y + (SlotSize - DragHandleSize) * 0.5f);
+		return new Rectangle((int)sb.BarScreenPosition.X, y, DragHandleSize, DragHandleSize);
 	}
 
 	public static Rectangle GetSlotRect(SkillBarPlayer sb, int slot)
 	{
 		sb.EnsureDefaultPosition();
-		float x = sb.BarScreenPosition.X + slot * (SlotSize + SlotPadding);
-		float y = sb.BarScreenPosition.Y + DragHandleHeight + 2;
+		float x = sb.BarScreenPosition.X + DragHandleSize + SlotPadding + slot * (SlotSize + SlotPadding);
+		float y = sb.BarScreenPosition.Y;
 		return new Rectangle((int)x, (int)y, SlotSize, SlotSize);
 	}
 
@@ -80,10 +76,11 @@ public static class SkillBarUI
 		sb.EnsureDefaultPosition();
 		ClampToScreen(sb);
 
-		Rectangle dragHandle = GetDragHandle(sb);
 		Texture2D panel = TextureAssets.InventoryBack.Value;
+		Rectangle dragHandle = GetDragHandle(sb);
 
-		spriteBatch.Draw(panel, dragHandle.TopLeft(), new Rectangle(0, 0, 52, 52), Color.White * 0.85f, 0f, Vector2.Zero, new Vector2(dragHandle.Width / 52f, DragHandleHeight / 52f), SpriteEffects.None, 0f);
+		spriteBatch.Draw(panel, dragHandle.TopLeft(), new Rectangle(0, 0, 52, 52), Color.White * 0.9f, 0f, Vector2.Zero, DragHandleSize / 52f, SpriteEffects.None, 0f);
+		DrawDragHandleIcon(spriteBatch, dragHandle);
 
 		for (int i = 0; i < SkillBar.SlotCount; i++) {
 			Rectangle slotRect = GetSlotRect(sb, i);
@@ -136,14 +133,14 @@ public static class SkillBarUI
 		_prevMouseRight = mouseRight;
 		_prevMouseMiddle = mouseMiddle;
 
-		// Only handle bar input when the cursor is over the bar (works even with inventory open).
 		if (!IsMouseOverBar(sb) && !sb.DraggingBar)
 			return;
 
 		Rectangle dragHandle = GetDragHandle(sb);
 		Point mouse = MousePoint;
+		bool shiftHeld = Main.keyState.IsKeyDown(Keys.LeftShift) || Main.keyState.IsKeyDown(Keys.RightShift);
 
-		if (mouseLeft && dragHandle.Contains(mouse) && !IsMouseOverSlot(sb, mouse)) {
+		if (mouseLeft && dragHandle.Contains(mouse)) {
 			if (!sb.DraggingBar) {
 				sb.DraggingBar = true;
 				sb.DragMouseOffset = mouse.ToVector2() - sb.BarScreenPosition;
@@ -182,6 +179,17 @@ public static class SkillBarUI
 			return;
 		}
 
+		if (shiftHeld && leftReleased && slotHasItem && Main.mouseItem.IsAir) {
+			int emptySlot = sb.FirstEmptySlotIndex();
+			if (emptySlot >= 0 && emptySlot != hoveredSlot) {
+				sb.Slots[emptySlot] = sb.Slots[hoveredSlot].Clone();
+				sb.Slots[emptySlot].stack = 1;
+				SoundEngine.PlaySound(SoundID.Grab);
+				Main.NewText(Language.GetTextValue("Mods.SkillBar.Assigned", sb.Slots[emptySlot].Name), Color.LightGreen);
+				return;
+			}
+		}
+
 		if (leftReleased && !altHeld)
 			TryAssignToSlot(sb, hoveredSlot);
 
@@ -206,7 +214,7 @@ public static class SkillBarUI
 			return false;
 		}
 
-		// Skill slots are bookmarks only — never delete inventory items.
+		// Bookmarks are independent per slot — duplicates are allowed.
 		sb.Slots[slot] = source.Clone();
 		sb.Slots[slot].stack = 1;
 
@@ -227,30 +235,32 @@ public static class SkillBarUI
 		if (slotItem.IsAir)
 			return;
 
-		// Clearing a bookmark does not create or delete real items.
 		sb.Slots[slot].TurnToAir();
 		SoundEngine.PlaySound(SoundID.Grab);
-	}
-
-	private static bool IsMouseOverSlot(SkillBarPlayer sb, Point mouse)
-	{
-		for (int i = 0; i < SkillBar.SlotCount; i++) {
-			if (GetSlotRect(sb, i).Contains(mouse))
-				return true;
-		}
-		return false;
 	}
 
 	private static void DrawSlotItem(SpriteBatch spriteBatch, Item item, Rectangle slotRect)
 	{
 		Main.instance.LoadItem(item.type);
-		Main.GetItemDrawFrame(item.type, out Texture2D texture, out Rectangle frame);
-		float scale = 1f;
-		if (item.width > 0 && item.height > 0)
-			scale = MathHelper.Min(SlotSize / (float)item.width, SlotSize / (float)item.height) * 0.9f;
+		Texture2D texture = TextureAssets.Item[item.type].Value;
+		Main.GetItemDrawFrame(item.type, out _, out Rectangle frame);
+
+		float maxDim = System.Math.Max(frame.Width, frame.Height);
+		float scale = maxDim > 0f ? (SlotSize * 0.85f) / maxDim : 1f;
+		scale = System.Math.Min(scale, 1f);
 
 		Vector2 center = slotRect.Center.ToVector2();
 		spriteBatch.Draw(texture, center, frame, Color.White, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+	}
+
+	private static void DrawDragHandleIcon(SpriteBatch spriteBatch, Rectangle handleRect)
+	{
+		// Open-hand cursor texture (vanilla index 2).
+		Texture2D hand = TextureAssets.Cursors[2].Value;
+		float maxDim = System.Math.Max(hand.Width, hand.Height);
+		float scale = maxDim > 0f ? (DragHandleSize - 6f) / maxDim : 1f;
+		Vector2 center = handleRect.Center.ToVector2();
+		spriteBatch.Draw(hand, center, null, Color.White * 0.95f, 0f, hand.Size() * 0.5f, scale, SpriteEffects.None, 0f);
 	}
 
 	private static void ReturnItemToInventory(Player player, Item item)

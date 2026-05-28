@@ -17,7 +17,7 @@ DragHint: Drag to move skill bar
 NotUsable: That item cannot be placed on the skill bar.
 NoResources: Not enough mana or materials to use that skill.
 Assigned: Assigned {0} to skill bar.
-ShiftAssignHint: Shift+click inventory items to assign them to the skill bar.
+ShiftAssignHint: Shift+click inventory items to assign them to the skill bar. Shift+click a filled slot to copy it to the next empty slot.
 EmptySlot: That skill bar slot is empty.
 NeedInInventory: You need that item in your inventory to use it from the skill bar.
 NoMana: Not enough mana.

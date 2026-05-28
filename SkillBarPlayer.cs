@@ -273,7 +273,8 @@ public class SkillBarPlayer : ModPlayer
 			return;
 		}
 
-		if (Player.itemAnimation > 0 || Player.itemTime > 0) {
+		bool isMiningTool = SkillBarToolUse.IsMiningTool(useItem);
+		if (!isMiningTool && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
 			if (Player.whoAmI == Main.myPlayer)
 				Main.NewText(Language.GetTextValue("Mods.SkillBar.OnCooldown"), Color.Gray);
 			return;
@@ -281,7 +282,7 @@ public class SkillBarPlayer : ModPlayer
 
 		bool used;
 
-		if (SkillBarToolUse.IsMiningTool(useItem))
+		if (isMiningTool)
 			used = SkillBarItemUse.TryUseMiningTool(Player, useItem, cursorWorld);
 		else if (SkillBarPlacement.IsPlacementItem(useItem))
 			used = SkillBarItemUse.TryUsePlacement(Player, useItem, cursorWorld);

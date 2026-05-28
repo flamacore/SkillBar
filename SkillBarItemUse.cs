@@ -158,6 +158,38 @@ public static class SkillBarItemUse
 		return null;
 	}
 
+	/// <summary>
+	/// Briefly holds the inventory tool on a background hotbar slot (never the selected slot) so PickTile works.
+	/// </summary>
+	internal static bool WithTemporaryHeldItem(Player player, Item tool, System.Func<Item, bool> action)
+	{
+		int holdSlot = FindBackgroundHotbarSlot(player);
+		int prevSelected = player.selectedItem;
+		Item backupHold = player.inventory[holdSlot].Clone();
+
+		try {
+			player.inventory[holdSlot] = tool.Clone();
+			player.inventory[holdSlot].stack = 1;
+			player.selectedItem = holdSlot;
+			return action(player.inventory[holdSlot]);
+		}
+		finally {
+			player.inventory[holdSlot] = backupHold.Clone();
+			player.selectedItem = prevSelected;
+		}
+	}
+
+	internal static int FindBackgroundHotbarSlot(Player player)
+	{
+		const int hotbarSlots = 10;
+		for (int i = hotbarSlots - 1; i >= 0; i--) {
+			if (i != player.selectedItem)
+				return i;
+		}
+
+		return (player.selectedItem + 1) % hotbarSlots;
+	}
+
 	public static bool PlayerHasItem(Player player, int itemType)
 	{
 		return FindInventoryItem(player, itemType) != null;
