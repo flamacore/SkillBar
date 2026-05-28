@@ -44,6 +44,9 @@ public static class SkillBarConsumableUse
 		if (inv.potion && player.potionDelay > 0)
 			return false;
 
+		if (SkillBarSustainedUse.RequiresSustainedUse(inv))
+			return SkillBarSustainedUse.TryStart(sb, player, inv, slot, consumeOnComplete: true);
+
 		bool used = SkillBarItemUse.WithTemporaryHeldItem(player, inv, held => TryUseHeldConsumable(player, held));
 
 		if (!used)

@@ -32,7 +32,15 @@ public class SkillBarPlayer : ModPlayer
 	public int ChannelHoldSlot = -1;
 	public Item ChannelBackup = new Item();
 
+	public int SustainedUseSlot = -1;
+	public int SustainedUseHoldSlot = -1;
+	public int SustainedUsePrevSelected;
+	public Item SustainedUseBackup = new Item();
+	public bool SustainedUseConsumeOnComplete;
+	public bool SustainedUseAnimationActive;
+
 	public bool IsChanneling => ChannelSlot >= 0;
+	public bool IsSustainedUseActive => SustainedUseSlot >= 0;
 
 	private static bool _shownKeybindHint;
 	private static bool _loggedInputReady;
@@ -99,7 +107,46 @@ public class SkillBarPlayer : ModPlayer
 
 		FlushQueuedUse();
 		UpdateChanneling();
+		UpdateSustainedUse();
 		SkillBarConsumableUse.PruneDepletedBookmarks(this);
+	}
+
+	private void UpdateSustainedUse()
+	{
+		if (!IsSustainedUseActive)
+			return;
+
+		SkillBarSustainedUse.Tick(this, Player);
+	}
+
+	public void BeginSustainedUse(int slot, Item item, bool consumeOnComplete)
+	{
+		if (IsSustainedUseActive)
+			EndSustainedUse(Player);
+
+		SustainedUseSlot = slot;
+		SustainedUseConsumeOnComplete = consumeOnComplete;
+		SustainedUseAnimationActive = false;
+		SustainedUseHoldSlot = SkillBarItemUse.FindBackgroundHotbarSlot(Player);
+		SustainedUsePrevSelected = Player.selectedItem;
+		SustainedUseBackup = Player.inventory[SustainedUseHoldSlot].Clone();
+		Player.inventory[SustainedUseHoldSlot] = item.Clone();
+		Player.inventory[SustainedUseHoldSlot].stack = System.Math.Max(1, item.stack);
+		Player.selectedItem = SustainedUseHoldSlot;
+	}
+
+	public void EndSustainedUse(Player player)
+	{
+		if (SustainedUseHoldSlot < 0)
+			return;
+
+		player.inventory[SustainedUseHoldSlot] = SustainedUseBackup.Clone();
+		player.selectedItem = SustainedUsePrevSelected;
+		player.controlUseItem = false;
+		SustainedUseHoldSlot = -1;
+		SustainedUseSlot = -1;
+		SustainedUseConsumeOnComplete = false;
+		SustainedUseAnimationActive = false;
 	}
 
 	private void UpdateChanneling()
@@ -256,7 +303,7 @@ public class SkillBarPlayer : ModPlayer
 		if (slot < 0 || slot >= SkillBar.SlotCount)
 			return;
 
-		if (_queuedSlot >= 0)
+		if (_queuedSlot >= 0 || IsSustainedUseActive || IsChanneling)
 			return;
 
 		_queuedSlot = slot;
@@ -288,7 +335,7 @@ public class SkillBarPlayer : ModPlayer
 		if (slot < 0 || slot >= SkillBar.SlotCount)
 			return;
 
-		if (IsChanneling && slot != ChannelSlot)
+		if ((IsChanneling && slot != ChannelSlot) || (IsSustainedUseActive && slot != SustainedUseSlot))
 			return;
 
 		Item template = Slots[slot];
@@ -330,9 +377,10 @@ public class SkillBarPlayer : ModPlayer
 		}
 
 		bool isConsumable = SkillBarConsumableUse.IsConsumable(useItem);
+		bool isUsableItem = SkillBarUsableItemUse.IsUsableItem(useItem);
 		bool isMiningTool = SkillBarToolUse.IsMiningTool(useItem);
 		bool isChannel = SkillBarChannelUse.WantsChannel(useItem);
-		if (!isMiningTool && !isChannel && !isConsumable && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
+		if (!isMiningTool && !isChannel && !isConsumable && !isUsableItem && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
 			if (Player.whoAmI == Main.myPlayer)
 				Main.NewText(Language.GetTextValue("Mods.SkillBar.OnCooldown"), Color.Gray);
 			return;
@@ -342,6 +390,8 @@ public class SkillBarPlayer : ModPlayer
 
 		if (isConsumable)
 			used = SkillBarConsumableUse.TryUse(Player, useItem, slot, this);
+		else if (isUsableItem)
+			used = SkillBarUsableItemUse.TryUse(Player, useItem, slot, this);
 		else if (isMiningTool)
 			used = SkillBarItemUse.TryUseMiningTool(Player, useItem, cursorWorld);
 		else if (SkillBarPlacement.IsPlacementItem(useItem))
@@ -349,7 +399,7 @@ public class SkillBarPlayer : ModPlayer
 		else
 			used = SkillBarItemUse.TryUseWeapon(Player, useItem, cursorWorld, slot, this);
 
-		if (used && !isChannel && !isConsumable)
+		if (used && !isChannel && !isConsumable && !isUsableItem && !IsSustainedUseActive)
 			SetSlotCooldown(slot, useItem);
 
 		if (!used && Player.whoAmI == Main.myPlayer)

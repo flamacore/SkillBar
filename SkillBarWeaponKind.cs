@@ -11,6 +11,9 @@ internal enum SkillBarWeaponKind
 	/// <summary>Potions, food, buff drinks.</summary>
 	Consumable,
 
+	/// <summary>Magic Mirror, Cell Phone, boss spawners without a shoot projectile.</summary>
+	UsableItem,
+
 	/// <summary>Flamethrowers, drills, etc. — hold skill key while channeling.</summary>
 	Channel,
 
@@ -33,6 +36,9 @@ internal static class SkillBarWeaponKindClassifier
 	{
 		if (SkillBarConsumableUse.IsConsumable(item))
 			return SkillBarWeaponKind.Consumable;
+
+		if (SkillBarUsableItemUse.IsUsableItem(item))
+			return SkillBarWeaponKind.UsableItem;
 
 		if (item.channel)
 			return SkillBarWeaponKind.Channel;

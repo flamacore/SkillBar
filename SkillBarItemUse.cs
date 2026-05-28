@@ -214,6 +214,9 @@ public static class SkillBarItemUse
 		if (SkillBarConsumableUse.IsConsumable(template))
 			return inv.stack > 0;
 
+		if (SkillBarUsableItemUse.IsUsableItem(template))
+			return inv.stack > 0;
+
 		if (template.shoot > ProjectileID.None) {
 			int projectileType = template.shoot;
 			float shootSpeed = template.shootSpeed;
