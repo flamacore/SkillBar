@@ -47,6 +47,8 @@ internal static class SkillBarSustainedUse
 		// selectedItem stays on the background hold slot for the whole use (see BeginSustainedUse).
 		bool oldUse = player.controlUseItem;
 
+		sb.RefreshItemBarSuppress(sb.SustainedUseHoldSlot);
+
 		try {
 			if (firstPulse) {
 				// One press — not a held mouse button. Holding controlUseItem would restart every cycle (Magic Mirror loop).

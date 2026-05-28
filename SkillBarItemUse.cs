@@ -159,6 +159,9 @@ public static class SkillBarItemUse
 		int holdSlot = FindBackgroundHotbarSlot(player);
 		int prevSelected = player.selectedItem;
 		Item backupHold = player.inventory[holdSlot].Clone();
+		var sb = player.GetModPlayer<SkillBarPlayer>();
+
+		sb.BeginItemBarAction(holdSlot);
 
 		try {
 			player.inventory[holdSlot] = tool.Clone();
@@ -169,6 +172,7 @@ public static class SkillBarItemUse
 		finally {
 			player.inventory[holdSlot] = backupHold.Clone();
 			player.selectedItem = prevSelected;
+			sb.EndItemBarAction();
 		}
 	}
 

@@ -60,16 +60,6 @@ public class SkillBarConfig : ModConfig
 	public Keys Slot10Key = Keys.OemQuestion;
 
 	[Header("InputHeader")]
-	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.UseMiddleClick.Label")]
-	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.UseMiddleClick.Tooltip")]
-	[DefaultValue(true)]
-	public bool UseMiddleClick { get; set; } = true;
-
-	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.UseAltClick.Label")]
-	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.UseAltClick.Tooltip")]
-	[DefaultValue(true)]
-	public bool UseAltClick { get; set; } = true;
-
 	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.AllowWithInventoryOpen.Label")]
 	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.AllowWithInventoryOpen.Tooltip")]
 	[DefaultValue(true)]

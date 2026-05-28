@@ -53,6 +53,8 @@ internal static class SkillBarChannelUse
 		int prevSelected = player.selectedItem;
 		bool oldUse = player.controlUseItem;
 
+		sb.RefreshItemBarSuppress(sb.ChannelHoldSlot);
+
 		try {
 			player.selectedItem = sb.ChannelHoldSlot;
 			player.controlUseItem = true;

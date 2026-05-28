@@ -1,8 +1,8 @@
-# Skill Bar
+# Item Bar
 
 **A second hotbar for Terraria — bookmark your gear, press a key, use it at the cursor.**
 
-Skill Bar adds a draggable 10-slot bar for items you want quick access to without cluttering your main hotbar. Slots are **bookmarks only**: items stay in your inventory. Press a bound key (or click a slot) to use that item toward your cursor, the same way you would from the normal hotbar — spells, tools, potions, mirrors, boss summons, and more.
+Item Bar adds a draggable 10-slot bar for items you want quick access to without cluttering your main hotbar. Slots are **bookmarks only**: items stay in your inventory. Press a bound key (or click a slot) to use that item toward your cursor, the same way you would from the normal hotbar — spells, tools, potions, mirrors, boss summons, and more.
 
 Works in single player and multiplayer. Client-side UI and keybinds; uses sync-friendly item logic.
 
@@ -11,7 +11,7 @@ Works in single player and multiplayer. Client-side UI and keybinds; uses sync-f
 ## Why use it?
 
 - Keep **weapons, spells, and summons** on dedicated keys while your hotbar holds building blocks and tools.
-- **Mine, place, and fight** from the skill bar without swapping your selected hotbar slot.
+- **Mine, place, and fight** from the item bar without swapping your selected hotbar slot.
 - **Potions and food** on one key — consumes from inventory and clears the slot when you run out.
 - **Magic Mirror, Cell Phone, boss spawners**, and similar items work through vanilla use logic.
 - **Same item in multiple slots** — e.g. two different keys for the same wand, or duplicate bookmarks via Shift+click.
@@ -20,10 +20,10 @@ Works in single player and multiplayer. Client-side UI and keybinds; uses sync-f
 
 ## Quick start
 
-1. Enable **Skill Bar** in the mod list and join a world.
+1. Enable **Item Bar** in the mod list and join a world.
 2. On first load you’ll see a hint: default slot 1 is **Z**.
 3. **Assign items:**
-   - **Left-click** a skill slot while holding an item (or hovering one in inventory), or  
+   - **Left-click** a slot while holding an item (or hovering one in inventory), or  
    - **Shift + left-click** an inventory item (assigns to the slot under your cursor, or the first empty slot).
 4. **Use items:**
    - Press the key for that slot (**Z, X, C, V, B, N, M**, comma, period, slash by default), or  
@@ -50,7 +50,7 @@ Your bar position and slot bookmarks are saved per character.
 | 9 | . (period) |
 | 10 | / (slash) |
 
-Rebind any slot under **Settings → Mod Configuration → Skill Bar**, or **Settings → Key Bindings → Skill Bar** (menu keybinds).
+Rebind any slot under **Settings → Mod Configuration → Item Bar**, or **Settings → Key Bindings → Item Bar** (menu keybinds).
 
 ---
 
@@ -64,16 +64,18 @@ Rebind any slot under **Settings → Mod Configuration → Skill Bar**, or **Set
 | **Placement** | Blocks, platforms, rope, walls | Places at the cursor within normal reach. |
 | **Consumables** | Potions, food, buff drinks | Uses one from inventory; slot clears when none left. |
 | **Usable items** | Magic Mirror, Cell Phone, boss summons | Full use animation where needed; consumable summons use one from stack. |
-| **Channel weapons** | Flamethrower, drills | **Hold** the skill key while spraying (like holding mouse on the hotbar). |
+| **Channel weapons** | Flamethrower, drills | **Hold** the item bar key while spraying (like holding mouse on the hotbar). |
 
 Items must stay in your **inventory** (or hotbar) to use. The bar never deletes or duplicates real items — only bookmarks.
+
+**Not supported:** yoyos and flails/maces (use your hotbar for those).
 
 ---
 
 ## Tips
 
-- **Shift + left-click** a filled skill slot to **copy** that bookmark to the next empty slot.
-- **Right-click** a skill slot to **clear** the bookmark (does not destroy inventory items).
+- **Shift + left-click** a filled slot to **copy** that bookmark to the next empty slot.
+- **Right-click** a slot to **clear** the bookmark (does not destroy inventory items).
 - If your cursor is on the bar when you press a key, aim defaults **forward from the player** so you don’t shoot into the UI.
 - **Channel weapons** need the key held, not a single tap.
 - **Potion sickness** and normal use cooldowns apply.
@@ -82,25 +84,25 @@ Items must stay in your **inventory** (or hotbar) to use. The bar never deletes 
 
 ## Mod configuration
 
-Open **Settings → Mod Configuration → Skill Bar**:
+Open **Settings → Mod Configuration → Item Bar**:
 
 | Option | Description |
 |--------|-------------|
-| Enable skill bar | Turn the bar and all skill input on or off. |
+| Enable item bar | Turn the bar and all item bar input on or off. |
 | Show bound keys on slots | Display key labels on each slot. |
 | Slot 1–10 keys | Keyboard binding per slot (client-side). |
-| Middle-click slot to use | Use a skill by middle-clicking its slot. |
+| Middle-click slot to use | Use an item by middle-clicking its slot. |
 | Alt + left-click slot to use | Alternative mouse use binding. |
-| Allow use while inventory open | Skills work with inventory open (default: on). |
-| Allow use while chat open | Skills work while typing in chat (default: off). |
-| Debug log all skill input | Chat messages when slots fire (for troubleshooting). |
+| Allow use while inventory open | Item bar works with inventory open (default: on). |
+| Allow use while chat open | Item bar works while typing in chat (default: off). |
+| Debug log all item bar input | Chat messages when slots fire (for troubleshooting). |
 | Audit weapons on load | Writes a debug item list to your tModLoader folder (off by default). |
 
 ---
 
 ## Multiplayer
 
-- Skill Bar UI and keybinds are **client-side** — each player configures their own bar.
+- Item Bar UI and keybinds are **client-side** — each player configures their own bar.
 - Item use runs on your client with normal Terraria/tModLoader behavior; other players see the results (projectiles, mining, buffs, etc.) as usual.
 - Bookmarks and bar position are saved on **your character**.
 
@@ -146,7 +148,7 @@ All rights reserved by the author unless a license file is added to the reposito
 <details>
 <summary><strong>Short copy for Steam / Workshop / mod browser</strong></summary>
 
-**Skill Bar** — A draggable 10-slot skill bar for tModLoader. Bookmark items from your inventory and use them with dedicated keys or mouse clicks, aimed at your cursor. Supports weapons, spells, summons, tools, placement, potions, Magic Mirror, boss summons, and more — without replacing your main hotbar selection.
+**Item Bar** — A draggable 10-slot item bar for tModLoader. Bookmark items from your inventory and use them with dedicated keys or mouse clicks, aimed at your cursor. Supports weapons, spells, summons, tools, placement, potions, Magic Mirror, boss summons, and more — without replacing your main hotbar selection.
 
 **Controls:** Assign with left-click or Shift+click from inventory. Use with Z–M and punctuation keys (configurable), middle-click, or Alt+click. Drag the hand icon to move the bar.
 

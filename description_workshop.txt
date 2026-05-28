@@ -1,1 +1,71 @@
-This description will show up on the steam page, check out https://steamcommunity.com/comment/Guide/formattinghelp.
+[h1]Item Bar[/h1]
+
+[b]A second hotbar for Terraria — bookmark items from your inventory and use them with dedicated keys, aimed at your cursor.[/b]
+
+Item Bar adds a draggable 10-slot bar so you can reach for tools, spells, potions, and more without swapping your main hotbar selection. Slots are [b]bookmarks only[/b]: items stay in your inventory.
+
+[hr][/hr]
+
+[h2]Early beta[/h2]
+
+[b]This mod is in very early beta.[/b] Some items may behave oddly or not work at all — especially [b]melee weapons[/b], which often fail from the item bar. That is not the main intention of this mod; it is meant for quick access to summons, spells, tools, consumables, mirrors, and similar items.
+
+[b]Not tested with controller / gamepad input[/b] — keyboard and mouse only for now.
+
+If something breaks, please report it on GitHub (link below).
+
+[hr][/hr]
+
+[h2]Why use Item Bar?[/h2]
+
+The main goal is quality-of-life for item switching. For example, if you are not a summoner but still keep a summon for help, you normally select the summon staff, use it, then switch back to your weapon.
+
+With Item Bar, press one key — the summon is used toward your cursor while your hotbar selection stays unchanged.
+
+[hr][/hr]
+
+[h2]Supported items[/h2]
+
+[list]
+[*]Weapons, spells, and summons (vanilla-accurate shooting)
+[*]Pickaxes, axes, and hammers
+[*]Blocks, platforms, rope, and walls
+[*]Potions, food, and buff drinks (consumes from inventory; slot clears when empty)
+[*]Magic Mirror, Cell Phone, boss summons, and similar usable items
+[*]Channel weapons (flamethrowers, drills) — [b]hold[/b] the item bar key while spraying
+[/list]
+
+[h2]Not supported / known issues[/h2]
+
+[list]
+[*]Yoyos and flails / maces (Sunfury, etc.) — use your hotbar for those weapons
+[*][b]Melee weapons[/b] — often do not work; melee combat is not this mod's main focus
+[*][b]Controller / gamepad[/b] — not tested; use keyboard and mouse
+[/list]
+
+[hr][/hr]
+
+[h2]Controls[/h2]
+
+[list]
+[*][b]Assign:[/b] left-click a slot while holding or hovering an item
+[*][b]Use:[/b] Z X C V B N M , . / by default (configurable)
+[*][b]Move bar:[/b] drag the hand icon on the left
+[*][b]Clear slot:[/b] right-click
+[/list]
+
+Configure keys under [b]Mod Configuration → Item Bar[/b] or [b]Settings → Key Bindings → Item Bar[/b]. Bar position and bookmarks save per character.
+
+Default slot 1 key: [b]Z[/b]
+
+[hr][/hr]
+
+[h2]Multiplayer[/h2]
+
+Item Bar UI and keybinds are client-side. Each player sets up their own bar. Works in multiplayer.
+
+[hr][/hr]
+
+[i]Version {ModVersion} · Author: Chao · Developed with AI assistance[/i]
+
+[url=https://github.com/flamacore/SkillBar]Source & issues on GitHub[/url]

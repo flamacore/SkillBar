@@ -1,22 +1,22 @@
 # Prefix: Mods.SkillBar.Configs (from filename)
 
 SkillBarConfig: {
-	DisplayName: Skill Bar
+	DisplayName: Item Bar
 
 	Headers: {
 		GeneralHeader: General
 		KeybindsHeader: Keybinds
-		InputHeader: Mouse and input behavior
+		InputHeader: Input behavior
 	}
 
 	Enabled: {
-		Label: Enable skill bar
-		Tooltip: Turns the skill bar and its inputs on or off.
+		Label: Enable item bar
+		Tooltip: Turns the item bar and its keybinds on or off.
 	}
 
 	ShowKeyLabels: {
 		Label: Show bound keys on slots
-		Tooltip: Shows the key for each slot on the bar. Set keys below and in Settings > Key Bindings > Skill Bar.
+		Tooltip: Shows the key for each slot on the bar. Set keys below and in Settings > Key Bindings > Item Bar.
 	}
 
 	Slot1Key: {
@@ -69,33 +69,23 @@ SkillBarConfig: {
 		Tooltip: ""
 	}
 
-	UseMiddleClick: {
-		Label: Middle-click slot to use
-		Tooltip: Middle-mouse on a filled skill slot uses that skill toward the cursor.
-	}
-
-	UseAltClick: {
-		Label: Alt + left-click slot to use
-		Tooltip: Hold Alt and left-click a filled slot to use it. Left-click without Alt assigns items.
-	}
-
 	AllowWithInventoryOpen: {
 		Label: Allow use while inventory is open
-		Tooltip: Lets skills fire while the inventory is open.
+		Tooltip: Lets item bar items fire while the inventory is open.
 	}
 
 	AllowWhileChatOpen: {
 		Label: Allow use while chat is open
-		Tooltip: Lets skills fire while the chat box is open. Usually leave off.
+		Tooltip: Lets item bar items fire while the chat box is open. Usually leave off.
 	}
 
 	LogKeyPresses: {
-		Label: Debug log all skill input
-		Tooltip: Prints a cyan message whenever a skill slot fires (keyboard, menu bind, or mouse).
+		Label: Debug log all item bar input
+		Tooltip: Prints a cyan message whenever an item bar slot fires (keyboard or menu keybind).
 	}
 
 	AuditWeaponsOnLoad: {
 		Label: Audit weapons on load (debug)
-		Tooltip: Writes Documents/My Games/Terraria/tModLoader/SkillBar_weapon_audit.txt listing unusual item patterns. Disable after one load.
+		Tooltip: Writes Documents/My Games/Terraria/tModLoader/ItemBar_weapon_audit.txt listing unusual item patterns. Disable after one load.
 	}
 }

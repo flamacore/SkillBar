@@ -1,6 +1,8 @@
-Skill Bar adds a draggable 10-slot bar for quick access to items without cluttering your main hotbar.
+Item Bar adds a draggable 10-slot bar for quick access to items without cluttering your main hotbar.
 
-Slots are bookmarks only — items stay in your inventory. Press a bound key or click a slot to use that item toward your cursor, just like the normal hotbar.
+The main goal of this mod is to give some quality of life to item-switching. A good example is that if you're not a summoner but still utilize a summon for help, you have to change to your summon item and then change back to your main item. This mod allows you to directly use your summon item without having to ever swap.
+
+Slots are bookmarks only — items stay in your inventory. Press a bound key to use that item toward your cursor, just like the normal hotbar.
 
 SUPPORTED ITEMS
 • Weapons, spells, and summons (vanilla-accurate shooting)
@@ -9,13 +11,23 @@ SUPPORTED ITEMS
 • Potions, food, and buff drinks (consumes from inventory; slot clears when empty)
 • Magic Mirror, Cell Phone, boss summons, and similar usable items
 
+NOT SUPPORTED / KNOWN ISSUES
+• Yoyos and flails / maces — use your hotbar for those
+• Melee weapons often do not work correctly — combat swapping is not the main focus of this mod
+• Not tested with controller / gamepad input — keyboard and mouse only for now
+
 CONTROLS
-• Assign: left-click a slot with an item, or Shift+click from inventory
-• Use: Z X C V B N M , . / by default (configurable), middle-click, or Alt+click
+• Assign: left-click a slot while holding or hovering an item
+• Use: Z X C V B N M , . / by default (configurable in Mod Config or Key Bindings)
 • Move bar: drag the hand icon on the left
 • Clear slot: right-click
-• Copy bookmark: Shift+click a filled slot
 
-Configure keys and options under Mod Configuration → Skill Bar. Bar position and bookmarks save per character. Client-side UI; works in multiplayer.
+Configure keys and options under Mod Configuration → Item Bar. Bar position and bookmarks save per character. Client-side UI; works in multiplayer.
 
 Default slot 1 key: Z
+
+EARLY BETA
+This is a very early beta. Some items may behave oddly or not work at all. Report issues on GitHub if you find problems.
+
+Source: https://github.com/flamacore/SkillBar
+Developed with AI assistance.

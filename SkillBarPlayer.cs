@@ -23,9 +23,6 @@ public class SkillBarPlayer : ModPlayer
 	private ulong _lastTriggerFrame = ulong.MaxValue;
 	private int _lastTriggerSlot = -1;
 
-	// One skill use per frame, executed in PostUpdate (after vanilla input).
-	private int _queuedSlot = -1;
-	private Vector2 _queuedAim;
 	private readonly int[] _slotCooldown = new int[SkillBar.SlotCount];
 
 	public int ChannelSlot = -1;
@@ -41,6 +38,10 @@ public class SkillBarPlayer : ModPlayer
 
 	public bool IsChanneling => ChannelSlot >= 0;
 	public bool IsSustainedUseActive => SustainedUseSlot >= 0;
+
+	/// <summary>Background hotbar slot used for item bar ItemCheck — PreItemCheck allows only this slot.</summary>
+	internal int ItemBarHoldSlot = -1;
+	internal int SuppressHotbarItemCheckFrames;
 
 	private static bool _shownKeybindHint;
 	private static bool _loggedInputReady;
@@ -92,7 +93,46 @@ public class SkillBarPlayer : ModPlayer
 		if (Player.whoAmI != Main.myPlayer)
 			return;
 
+		if (SuppressHotbarItemCheckFrames > 0 && Player.selectedItem != ItemBarHoldSlot)
+			Player.controlUseItem = false;
+
 		PollConfigKeys();
+	}
+
+	public override bool PreItemCheck()
+	{
+		if (Player.whoAmI != Main.myPlayer)
+			return base.PreItemCheck();
+
+		if (SuppressHotbarItemCheckFrames > 0) {
+			if (ItemBarHoldSlot >= 0 && Player.selectedItem == ItemBarHoldSlot)
+				return base.PreItemCheck();
+			Player.controlUseItem = false;
+			return false;
+		}
+
+		return base.PreItemCheck();
+	}
+
+	internal void BeginItemBarAction(int holdSlot)
+	{
+		ItemBarHoldSlot = holdSlot;
+		SuppressHotbarItemCheckFrames = 8;
+		Player.controlUseItem = false;
+	}
+
+	internal void EndItemBarAction()
+	{
+		ItemBarHoldSlot = -1;
+		Player.controlUseItem = false;
+		SuppressHotbarItemCheckFrames = System.Math.Max(SuppressHotbarItemCheckFrames, 6);
+	}
+
+	internal void RefreshItemBarSuppress(int holdSlot)
+	{
+		ItemBarHoldSlot = holdSlot;
+		SuppressHotbarItemCheckFrames = 8;
+		Player.controlUseItem = false;
 	}
 
 	public override void PostUpdate()
@@ -105,10 +145,12 @@ public class SkillBarPlayer : ModPlayer
 				_slotCooldown[i]--;
 		}
 
-		FlushQueuedUse();
 		UpdateChanneling();
 		UpdateSustainedUse();
 		SkillBarConsumableUse.PruneDepletedBookmarks(this);
+
+		if (SuppressHotbarItemCheckFrames > 0)
+			SuppressHotbarItemCheckFrames--;
 	}
 
 	private void UpdateSustainedUse()
@@ -133,6 +175,7 @@ public class SkillBarPlayer : ModPlayer
 		Player.inventory[SustainedUseHoldSlot] = item.Clone();
 		Player.inventory[SustainedUseHoldSlot].stack = System.Math.Max(1, item.stack);
 		Player.selectedItem = SustainedUseHoldSlot;
+		RefreshItemBarSuppress(SustainedUseHoldSlot);
 	}
 
 	public void EndSustainedUse(Player player)
@@ -142,7 +185,7 @@ public class SkillBarPlayer : ModPlayer
 
 		player.inventory[SustainedUseHoldSlot] = SustainedUseBackup.Clone();
 		player.selectedItem = SustainedUsePrevSelected;
-		player.controlUseItem = false;
+		EndItemBarAction();
 		SustainedUseHoldSlot = -1;
 		SustainedUseSlot = -1;
 		SustainedUseConsumeOnComplete = false;
@@ -172,6 +215,7 @@ public class SkillBarPlayer : ModPlayer
 		ChannelBackup = Player.inventory[ChannelHoldSlot].Clone();
 		Player.inventory[ChannelHoldSlot] = item.Clone();
 		Player.inventory[ChannelHoldSlot].stack = 1;
+		RefreshItemBarSuppress(ChannelHoldSlot);
 	}
 
 	public void EndChannel(Player player)
@@ -180,7 +224,7 @@ public class SkillBarPlayer : ModPlayer
 			return;
 
 		player.inventory[ChannelHoldSlot] = ChannelBackup.Clone();
-		player.controlUseItem = false;
+		EndItemBarAction();
 		ChannelHoldSlot = -1;
 		ChannelSlot = -1;
 	}
@@ -303,29 +347,22 @@ public class SkillBarPlayer : ModPlayer
 		if (slot < 0 || slot >= SkillBar.SlotCount)
 			return;
 
-		if (_queuedSlot >= 0 || IsSustainedUseActive || IsChanneling)
+		if (IsSustainedUseActive || IsChanneling)
 			return;
 
-		_queuedSlot = slot;
-		_queuedAim = SkillBarAim.GetUsePosition(Player, this);
+		Vector2 aim = SkillBarAim.GetUsePosition(Player, this);
+
+		// Must run before vanilla ItemCheck — held mouse would otherwise fire the selected hotbar weapon too.
+		SuppressHotbarItemCheckFrames = System.Math.Max(SuppressHotbarItemCheckFrames, 8);
+		Player.controlUseItem = false;
 
 		if (Main.netMode == NetmodeID.MultiplayerClient) {
 			ModPacket packet = ModContent.GetInstance<SkillBar>().GetPacket();
 			packet.Write((byte)SkillBar.MessageType.RequestUseSlot);
 			packet.Write((byte)slot);
-			packet.WriteVector2(_queuedAim);
+			packet.WriteVector2(aim);
 			packet.Send();
 		}
-	}
-
-	private void FlushQueuedUse()
-	{
-		if (_queuedSlot < 0)
-			return;
-
-		int slot = _queuedSlot;
-		Vector2 aim = _queuedAim;
-		_queuedSlot = -1;
 
 		UseSlot(slot, aim, fromNetwork: false);
 	}
@@ -337,6 +374,9 @@ public class SkillBarPlayer : ModPlayer
 
 		if ((IsChanneling && slot != ChannelSlot) || (IsSustainedUseActive && slot != SustainedUseSlot))
 			return;
+
+		Player.controlUseItem = false;
+		SuppressHotbarItemCheckFrames = System.Math.Max(SuppressHotbarItemCheckFrames, 8);
 
 		Item template = Slots[slot];
 		if (template.IsAir) {

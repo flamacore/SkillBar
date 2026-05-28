@@ -66,9 +66,9 @@ public class SkillBarWeaponAudit : ModSystem
 		}
 
 		var sb = new StringBuilder();
-		sb.AppendLine("Skill Bar weapon audit — unusual vanilla/mod item patterns");
+		sb.AppendLine("Item Bar weapon audit — unusual vanilla/mod item patterns");
 		sb.AppendLine($"Items scanned: {ItemLoader.ItemCount}");
-		sb.AppendLine("Skill bar uses ItemCheck_Shoot / ItemCheck / channel hold for these categories.");
+		sb.AppendLine("Item bar uses ItemCheck_Shoot / ItemCheck / channel hold for these categories.");
 		sb.AppendLine();
 
 		foreach (var pair in buckets.OrderBy(p => p.Key)) {
@@ -78,8 +78,8 @@ public class SkillBarWeaponAudit : ModSystem
 			sb.AppendLine();
 		}
 
-		string path = Path.Combine(Main.SavePath, "SkillBar_weapon_audit.txt");
+		string path = Path.Combine(Main.SavePath, "ItemBar_weapon_audit.txt");
 		File.WriteAllText(path, sb.ToString());
-		ModContent.GetInstance<SkillBar>().Logger.Info($"Skill Bar weapon audit written to {path}");
+		ModContent.GetInstance<SkillBar>().Logger.Info($"Item Bar weapon audit written to {path}");
 	}
 }

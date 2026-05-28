@@ -1,7 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -20,7 +18,6 @@ public static class SkillBarUI
 
 	private static bool _prevMouseLeft;
 	private static bool _prevMouseRight;
-	private static bool _prevMouseMiddle;
 
 	public static float GetBarWidth()
 	{
@@ -125,20 +122,16 @@ public static class SkillBarUI
 
 		bool mouseLeft = Main.mouseLeft;
 		bool mouseRight = Main.mouseRight;
-		bool mouseMiddle = Main.mouseMiddle;
 		bool leftReleased = _prevMouseLeft && !mouseLeft;
 		bool rightReleased = _prevMouseRight && !mouseRight;
-		bool middlePressed = mouseMiddle && !_prevMouseMiddle;
 		_prevMouseLeft = mouseLeft;
 		_prevMouseRight = mouseRight;
-		_prevMouseMiddle = mouseMiddle;
 
 		if (!IsMouseOverBar(sb) && !sb.DraggingBar)
 			return;
 
 		Rectangle dragHandle = GetDragHandle(sb);
 		Point mouse = MousePoint;
-		bool shiftHeld = Main.keyState.IsKeyDown(Keys.LeftShift) || Main.keyState.IsKeyDown(Keys.RightShift);
 
 		if (mouseLeft && dragHandle.Contains(mouse)) {
 			if (!sb.DraggingBar) {
@@ -166,31 +159,7 @@ public static class SkillBarUI
 
 		Main.LocalPlayer.mouseInterface = true;
 
-		bool altHeld = Main.keyState.IsKeyDown(Keys.LeftAlt) || Main.keyState.IsKeyDown(Keys.RightAlt);
-		bool slotHasItem = !sb.Slots[hoveredSlot].IsAir;
-
-		if (SkillBarConfig.Instance.UseMiddleClick && middlePressed && slotHasItem && Main.mouseItem.IsAir) {
-			sb.TriggerSlot(hoveredSlot, "mouse");
-			return;
-		}
-
-		if (SkillBarConfig.Instance.UseAltClick && altHeld && leftReleased && slotHasItem && Main.mouseItem.IsAir) {
-			sb.TriggerSlot(hoveredSlot, "mouse");
-			return;
-		}
-
-		if (shiftHeld && leftReleased && slotHasItem && Main.mouseItem.IsAir) {
-			int emptySlot = sb.FirstEmptySlotIndex();
-			if (emptySlot >= 0 && emptySlot != hoveredSlot) {
-				sb.Slots[emptySlot] = sb.Slots[hoveredSlot].Clone();
-				sb.Slots[emptySlot].stack = 1;
-				SoundEngine.PlaySound(SoundID.Grab);
-				Main.NewText(Language.GetTextValue("Mods.SkillBar.Assigned", sb.Slots[emptySlot].Name), Color.LightGreen);
-				return;
-			}
-		}
-
-		if (leftReleased && !altHeld)
+		if (leftReleased)
 			TryAssignToSlot(sb, hoveredSlot);
 
 		if (rightReleased)
@@ -220,7 +189,6 @@ public static class SkillBarUI
 			return false;
 		}
 
-		// Bookmarks are independent per slot — duplicates are allowed.
 		sb.Slots[slot] = source.Clone();
 		sb.Slots[slot].stack = 1;
 
@@ -261,7 +229,6 @@ public static class SkillBarUI
 
 	private static void DrawDragHandleIcon(SpriteBatch spriteBatch, Rectangle handleRect)
 	{
-		// Open-hand cursor texture (vanilla index 2).
 		Texture2D hand = TextureAssets.Cursors[2].Value;
 		float maxDim = System.Math.Max(hand.Width, hand.Height);
 		float scale = maxDim > 0f ? (DragHandleSize - 6f) / maxDim : 1f;
