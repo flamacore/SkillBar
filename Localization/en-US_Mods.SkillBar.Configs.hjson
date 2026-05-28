@@ -1,0 +1,96 @@
+# Prefix: Mods.SkillBar.Configs (from filename)
+
+SkillBarConfig: {
+	DisplayName: Skill Bar
+
+	Headers: {
+		GeneralHeader: General
+		KeybindsHeader: Keybinds
+		InputHeader: Mouse and input behavior
+	}
+
+	Enabled: {
+		Label: Enable skill bar
+		Tooltip: Turns the skill bar and its inputs on or off.
+	}
+
+	ShowKeyLabels: {
+		Label: Show bound keys on slots
+		Tooltip: Shows the key for each slot on the bar. Set keys below and in Settings > Key Bindings > Skill Bar.
+	}
+
+	Slot1Key: {
+		Label: Slot 1 key (default Z)
+		Tooltip: ""
+	}
+
+	Slot2Key: {
+		Label: Slot 2 key (default X)
+		Tooltip: ""
+	}
+
+	Slot3Key: {
+		Label: Slot 3 key (default C)
+		Tooltip: ""
+	}
+
+	Slot4Key: {
+		Label: Slot 4 key (default V)
+		Tooltip: ""
+	}
+
+	Slot5Key: {
+		Label: Slot 5 key (default B)
+		Tooltip: ""
+	}
+
+	Slot6Key: {
+		Label: Slot 6 key (default N)
+		Tooltip: ""
+	}
+
+	Slot7Key: {
+		Label: Slot 7 key (default M)
+		Tooltip: ""
+	}
+
+	Slot8Key: {
+		Label: Slot 8 key (default comma)
+		Tooltip: ""
+	}
+
+	Slot9Key: {
+		Label: Slot 9 key (default period)
+		Tooltip: ""
+	}
+
+	Slot10Key: {
+		Label: Slot 10 key (default slash)
+		Tooltip: ""
+	}
+
+	UseMiddleClick: {
+		Label: Middle-click slot to use
+		Tooltip: Middle-mouse on a filled skill slot uses that skill toward the cursor.
+	}
+
+	UseAltClick: {
+		Label: Alt + left-click slot to use
+		Tooltip: Hold Alt and left-click a filled slot to use it. Left-click without Alt assigns items.
+	}
+
+	AllowWithInventoryOpen: {
+		Label: Allow use while inventory is open
+		Tooltip: Lets skills fire while the inventory is open.
+	}
+
+	AllowWhileChatOpen: {
+		Label: Allow use while chat is open
+		Tooltip: Lets skills fire while the chat box is open. Usually leave off.
+	}
+
+	LogKeyPresses: {
+		Label: Debug log all skill input
+		Tooltip: Prints a cyan message whenever a skill slot fires (keyboard, menu bind, or mouse).
+	}
+}

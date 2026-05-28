@@ -1,0 +1,3 @@
+displayName = Skill Bar
+author = Chao
+version = 1.4.0

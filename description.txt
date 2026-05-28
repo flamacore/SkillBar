@@ -1,0 +1,1 @@
+A draggable skill bar for spells, summons, sentries, ropes, blocks, and other usable items. Assign items to slots, then press the bound key to use them toward your cursor — including placing tiles like rope at the spot you aim at (within normal placement reach).

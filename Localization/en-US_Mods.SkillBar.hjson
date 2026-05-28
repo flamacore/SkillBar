@@ -1,0 +1,35 @@
+# Prefix: Mods.SkillBar (from filename)
+
+Keybinds: {
+	SkillSlot1.DisplayName: Skill Bar Slot 1
+	SkillSlot2.DisplayName: Skill Bar Slot 2
+	SkillSlot3.DisplayName: Skill Bar Slot 3
+	SkillSlot4.DisplayName: Skill Bar Slot 4
+	SkillSlot5.DisplayName: Skill Bar Slot 5
+	SkillSlot6.DisplayName: Skill Bar Slot 6
+	SkillSlot7.DisplayName: Skill Bar Slot 7
+	SkillSlot8.DisplayName: Skill Bar Slot 8
+	SkillSlot9.DisplayName: Skill Bar Slot 9
+	SkillSlot10.DisplayName: Skill Bar Slot 10
+}
+
+DragHint: Drag to move skill bar
+NotUsable: That item cannot be placed on the skill bar.
+NoResources: Not enough mana or materials to use that skill.
+Assigned: Assigned {0} to skill bar.
+ShiftAssignHint: Shift+click inventory items to assign them to the skill bar.
+EmptySlot: That skill bar slot is empty.
+NeedInInventory: You need that item in your inventory to use it from the skill bar.
+NoMana: Not enough mana.
+CannotUse: Cannot use that item right now.
+UseFailed: Could not use that skill. Aim at the world and make sure you have mana or ammo.
+OnCooldown: That skill is still on cooldown.
+CannotPlace: Cannot place there. Aim at a valid spot within reach.
+OutOfRange: That location is out of placement range.
+NothingToMine: Nothing to mine or chop there. Aim at a block, tree, or wall.
+KeybindHelp: Skill Bar - press Z for slot 1, or set keys in Mod Config. Middle-click a slot to use.
+InputReady: Skill Bar input active. Slot 1 key is {0}. Enable debug in config to log presses.
+SlotPressed: "[Skill Bar] Slot {0} ({1}) via {2}"
+UseOk: "[Skill Bar] Mining tile ({0}, {1})"
+UseDebugFail: "[Skill Bar] Use failed ({0})"
+UseCrashed: "[Skill Bar] Error: {0}"
