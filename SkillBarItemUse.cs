@@ -42,7 +42,7 @@ public static class SkillBarItemUse
 		if (!SkillBarToolUse.UseTowardCursor(player, bookmark, cursorWorld))
 			return false;
 
-		ApplyUseCooldown(player, tool);
+		FinishItemBarUse(player, tool);
 		return true;
 	}
 
@@ -60,7 +60,7 @@ public static class SkillBarItemUse
 		if (!SkillBarPlacement.PlaceTowardCursor(player, item, cursorWorld, consumeResources: true))
 			return false;
 
-		ApplyUseCooldown(player, item);
+		FinishItemBarUse(player, item);
 		return true;
 	}
 
@@ -112,7 +112,7 @@ public static class SkillBarItemUse
 			player.CheckMana(item, -1, pay: true);
 
 		if (!item.channel)
-			ApplyUseCooldown(player, item);
+			FinishItemBarUse(player, item);
 
 		return true;
 	}
@@ -136,8 +136,21 @@ public static class SkillBarItemUse
 			delay = 7;
 
 		player.ApplyItemTime(item);
-		player.itemAnimation = System.Math.Max(player.itemAnimation, delay);
-		player.itemTime = System.Math.Max(player.itemTime, delay);
+	}
+
+	/// <summary>Clears player-level use timers so the selected hotbar item does not finish a phantom swing.</summary>
+	internal static void ClearPlayerUseState(Player player)
+	{
+		player.itemAnimation = 0;
+		player.itemAnimationMax = 0;
+		player.itemTime = 0;
+		player.channel = false;
+	}
+
+	internal static void FinishItemBarUse(Player player, Item item)
+	{
+		ApplyUseCooldown(player, item);
+		ClearPlayerUseState(player);
 	}
 
 	internal static Item FindInventoryItem(Player player, int itemType)

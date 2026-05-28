@@ -78,7 +78,7 @@ internal static class SkillBarSustainedUse
 		if (sb.SustainedUseConsumeOnComplete)
 			SkillBarItemUse.ConsumeFromInventory(player, template);
 
-		SkillBarItemUse.ApplyUseCooldown(player, inv);
+		SkillBarItemUse.FinishItemBarUse(player, inv);
 
 		if (SkillBarConsumableUse.IsConsumable(template))
 			SkillBarConsumableUse.ClearBookmarkIfDepleted(sb, slot, template);

@@ -27,7 +27,7 @@ Configure keys and options under Mod Configuration → Item Bar. Bar position an
 Default slot 1 key: Z
 
 EARLY BETA
-This is a very early beta. Some items may behave oddly or not work at all. Report issues on GitHub if you find problems.
+This is a very early beta — and my first ever mod! Please be gentle if something breaks :) Some items may behave oddly or not work at all. Report issues on GitHub if you find problems.
 
 Source: https://github.com/flamacore/SkillBar
 Developed with AI assistance.

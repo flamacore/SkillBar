@@ -185,6 +185,7 @@ public class SkillBarPlayer : ModPlayer
 
 		player.inventory[SustainedUseHoldSlot] = SustainedUseBackup.Clone();
 		player.selectedItem = SustainedUsePrevSelected;
+		SkillBarItemUse.ClearPlayerUseState(player);
 		EndItemBarAction();
 		SustainedUseHoldSlot = -1;
 		SustainedUseSlot = -1;
@@ -224,6 +225,7 @@ public class SkillBarPlayer : ModPlayer
 			return;
 
 		player.inventory[ChannelHoldSlot] = ChannelBackup.Clone();
+		SkillBarItemUse.ClearPlayerUseState(player);
 		EndItemBarAction();
 		ChannelHoldSlot = -1;
 		ChannelSlot = -1;
@@ -447,6 +449,9 @@ public class SkillBarPlayer : ModPlayer
 
 		if (used && !isChannel && !isConsumable && !isUsableItem && !IsSustainedUseActive)
 			SetSlotCooldown(slot, useItem);
+
+		if (used && !IsChanneling && !IsSustainedUseActive)
+			SkillBarItemUse.ClearPlayerUseState(Player);
 
 		if (!used && Player.whoAmI == Main.myPlayer)
 			Main.NewText(Language.GetTextValue("Mods.SkillBar.UseFailed"), Color.OrangeRed);

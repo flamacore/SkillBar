@@ -56,7 +56,7 @@ public static class SkillBarUsableItemUse
 		if (ShouldConsumeAfterUse(inv))
 			SkillBarItemUse.ConsumeFromInventory(player, bookmark);
 
-		SkillBarItemUse.ApplyUseCooldown(player, inv);
+		SkillBarItemUse.FinishItemBarUse(player, inv);
 
 		if (SkillBarConsumableUse.IsConsumable(bookmark))
 			SkillBarConsumableUse.ClearBookmarkIfDepleted(sb, slot, bookmark);

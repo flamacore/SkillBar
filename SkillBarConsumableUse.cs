@@ -53,7 +53,7 @@ public static class SkillBarConsumableUse
 			return false;
 
 		SkillBarItemUse.ConsumeFromInventory(player, bookmark);
-		SkillBarItemUse.ApplyUseCooldown(player, inv);
+		SkillBarItemUse.FinishItemBarUse(player, inv);
 		ClearBookmarkIfDepleted(sb, slot, bookmark);
 		return true;
 	}

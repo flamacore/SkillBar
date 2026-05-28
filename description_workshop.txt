@@ -8,7 +8,7 @@ Item Bar adds a draggable 10-slot bar so you can reach for tools, spells, potion
 
 [h2]Early beta[/h2]
 
-[b]This mod is in very early beta.[/b] Some items may behave oddly or not work at all — especially [b]melee weapons[/b], which often fail from the item bar. That is not the main intention of this mod; it is meant for quick access to summons, spells, tools, consumables, mirrors, and similar items.
+[b]This mod is in very early beta — and my first ever mod![/b] Please be gentle if something breaks :) Some items may behave oddly or not work at all — especially [b]melee weapons[/b], which often fail from the item bar. That is not the main intention of this mod; it is meant for quick access to summons, spells, tools, consumables, mirrors, and similar items.
 
 [b]Not tested with controller / gamepad input[/b] — keyboard and mouse only for now.
 
