@@ -8,6 +8,9 @@ namespace SkillBar;
 /// </summary>
 internal enum SkillBarWeaponKind
 {
+	/// <summary>Potions, food, buff drinks.</summary>
+	Consumable,
+
 	/// <summary>Flamethrowers, drills, etc. — hold skill key while channeling.</summary>
 	Channel,
 
@@ -28,6 +31,9 @@ internal static class SkillBarWeaponKindClassifier
 {
 	public static SkillBarWeaponKind Classify(Item item)
 	{
+		if (SkillBarConsumableUse.IsConsumable(item))
+			return SkillBarWeaponKind.Consumable;
+
 		if (item.channel)
 			return SkillBarWeaponKind.Channel;
 

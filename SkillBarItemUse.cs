@@ -211,6 +211,9 @@ public static class SkillBarItemUse
 		if (SkillBarToolUse.IsMiningTool(template))
 			return true;
 
+		if (SkillBarConsumableUse.IsConsumable(template))
+			return inv.stack > 0;
+
 		if (template.shoot > ProjectileID.None) {
 			int projectileType = template.shoot;
 			float shootSpeed = template.shootSpeed;

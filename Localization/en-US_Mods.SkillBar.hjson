@@ -20,6 +20,7 @@ Assigned: Assigned {0} to skill bar.
 ShiftAssignHint: Shift+click inventory items to assign them to the skill bar. Shift+click a filled slot to copy it to the next empty slot.
 EmptySlot: That skill bar slot is empty.
 NeedInInventory: You need that item in your inventory to use it from the skill bar.
+SlotCleared: No {0} left in inventory — removed from skill bar.
 NoMana: Not enough mana.
 CannotUse: Cannot use that item right now.
 UseFailed: Could not use that skill. Aim at the world and make sure you have mana or ammo.

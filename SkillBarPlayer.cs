@@ -99,6 +99,7 @@ public class SkillBarPlayer : ModPlayer
 
 		FlushQueuedUse();
 		UpdateChanneling();
+		SkillBarConsumableUse.PruneDepletedBookmarks(this);
 	}
 
 	private void UpdateChanneling()
@@ -304,7 +305,16 @@ public class SkillBarPlayer : ModPlayer
 		}
 
 		Item inventoryItem = SkillBarItemUse.FindInventoryItem(Player, template.type);
-		Item useItem = (inventoryItem ?? template).Clone();
+		if (inventoryItem == null) {
+			if (SkillBarConsumableUse.IsConsumable(template))
+				SkillBarConsumableUse.ClearBookmarkIfDepleted(this, slot, template);
+			else if (Player.whoAmI == Main.myPlayer)
+				Main.NewText(Language.GetTextValue("Mods.SkillBar.NeedInInventory"), Color.OrangeRed);
+
+			return;
+		}
+
+		Item useItem = inventoryItem.Clone();
 		useItem.stack = 1;
 
 		if (!SkillBarItemUse.HasResource(Player, useItem)) {
@@ -319,9 +329,10 @@ public class SkillBarPlayer : ModPlayer
 			return;
 		}
 
+		bool isConsumable = SkillBarConsumableUse.IsConsumable(useItem);
 		bool isMiningTool = SkillBarToolUse.IsMiningTool(useItem);
 		bool isChannel = SkillBarChannelUse.WantsChannel(useItem);
-		if (!isMiningTool && !isChannel && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
+		if (!isMiningTool && !isChannel && !isConsumable && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
 			if (Player.whoAmI == Main.myPlayer)
 				Main.NewText(Language.GetTextValue("Mods.SkillBar.OnCooldown"), Color.Gray);
 			return;
@@ -329,14 +340,16 @@ public class SkillBarPlayer : ModPlayer
 
 		bool used;
 
-		if (isMiningTool)
+		if (isConsumable)
+			used = SkillBarConsumableUse.TryUse(Player, useItem, slot, this);
+		else if (isMiningTool)
 			used = SkillBarItemUse.TryUseMiningTool(Player, useItem, cursorWorld);
 		else if (SkillBarPlacement.IsPlacementItem(useItem))
 			used = SkillBarItemUse.TryUsePlacement(Player, useItem, cursorWorld);
 		else
 			used = SkillBarItemUse.TryUseWeapon(Player, useItem, cursorWorld, slot, this);
 
-		if (used && !isChannel)
+		if (used && !isChannel && !isConsumable)
 			SetSlotCooldown(slot, useItem);
 
 		if (!used && Player.whoAmI == Main.myPlayer)
