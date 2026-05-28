@@ -27,7 +27,7 @@ OnCooldown: That skill is still on cooldown.
 CannotPlace: Cannot place there. Aim at a valid spot within reach.
 OutOfRange: That location is out of placement range.
 NothingToMine: Nothing to mine or chop there. Aim at a block, tree, or wall.
-KeybindHelp: Skill Bar - press Z for slot 1, or set keys in Mod Config. Middle-click a slot to use.
+KeybindHelp: Skill Bar - press Z for slot 1, or set keys in Mod Config. Middle-click a slot to use. Hold the key for channel weapons (flamethrower, etc.).
 InputReady: Skill Bar input active. Slot 1 key is {0}. Enable debug in config to log presses.
 SlotPressed: "[Skill Bar] Slot {0} ({1}) via {2}"
 UseOk: "[Skill Bar] Mining tile ({0}, {1})"

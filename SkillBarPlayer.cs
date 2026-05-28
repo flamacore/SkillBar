@@ -28,6 +28,12 @@ public class SkillBarPlayer : ModPlayer
 	private Vector2 _queuedAim;
 	private readonly int[] _slotCooldown = new int[SkillBar.SlotCount];
 
+	public int ChannelSlot = -1;
+	public int ChannelHoldSlot = -1;
+	public Item ChannelBackup = new Item();
+
+	public bool IsChanneling => ChannelSlot >= 0;
+
 	private static bool _shownKeybindHint;
 	private static bool _loggedInputReady;
 
@@ -92,6 +98,43 @@ public class SkillBarPlayer : ModPlayer
 		}
 
 		FlushQueuedUse();
+		UpdateChanneling();
+	}
+
+	private void UpdateChanneling()
+	{
+		if (!IsChanneling)
+			return;
+
+		int slot = ChannelSlot;
+		Item template = Slots[slot];
+		Vector2 aim = SkillBarAim.GetUsePosition(Player, this);
+
+		if (!SkillBarChannelUse.Tick(this, Player, aim) && !template.IsAir)
+			SetSlotCooldown(slot, template);
+	}
+
+	public void BeginChannel(int slot, Item item)
+	{
+		if (IsChanneling)
+			EndChannel(Player);
+
+		ChannelSlot = slot;
+		ChannelHoldSlot = SkillBarItemUse.FindBackgroundHotbarSlot(Player);
+		ChannelBackup = Player.inventory[ChannelHoldSlot].Clone();
+		Player.inventory[ChannelHoldSlot] = item.Clone();
+		Player.inventory[ChannelHoldSlot].stack = 1;
+	}
+
+	public void EndChannel(Player player)
+	{
+		if (ChannelHoldSlot < 0)
+			return;
+
+		player.inventory[ChannelHoldSlot] = ChannelBackup.Clone();
+		player.controlUseItem = false;
+		ChannelHoldSlot = -1;
+		ChannelSlot = -1;
 	}
 
 	public bool IsSlotOnCooldown(int slot)
@@ -244,6 +287,9 @@ public class SkillBarPlayer : ModPlayer
 		if (slot < 0 || slot >= SkillBar.SlotCount)
 			return;
 
+		if (IsChanneling && slot != ChannelSlot)
+			return;
+
 		Item template = Slots[slot];
 		if (template.IsAir) {
 			if (Player.whoAmI == Main.myPlayer)
@@ -274,7 +320,8 @@ public class SkillBarPlayer : ModPlayer
 		}
 
 		bool isMiningTool = SkillBarToolUse.IsMiningTool(useItem);
-		if (!isMiningTool && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
+		bool isChannel = SkillBarChannelUse.WantsChannel(useItem);
+		if (!isMiningTool && !isChannel && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
 			if (Player.whoAmI == Main.myPlayer)
 				Main.NewText(Language.GetTextValue("Mods.SkillBar.OnCooldown"), Color.Gray);
 			return;
@@ -287,9 +334,9 @@ public class SkillBarPlayer : ModPlayer
 		else if (SkillBarPlacement.IsPlacementItem(useItem))
 			used = SkillBarItemUse.TryUsePlacement(Player, useItem, cursorWorld);
 		else
-			used = SkillBarItemUse.TryUseWeapon(Player, useItem, cursorWorld);
+			used = SkillBarItemUse.TryUseWeapon(Player, useItem, cursorWorld, slot, this);
 
-		if (used)
+		if (used && !isChannel)
 			SetSlotCooldown(slot, useItem);
 
 		if (!used && Player.whoAmI == Main.myPlayer)

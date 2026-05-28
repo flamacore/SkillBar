@@ -85,6 +85,11 @@ public class SkillBarConfig : ModConfig
 	[DefaultValue(false)]
 	public bool LogKeyPresses { get; set; } = false;
 
+	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.AuditWeaponsOnLoad.Label")]
+	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.AuditWeaponsOnLoad.Tooltip")]
+	[DefaultValue(false)]
+	public bool AuditWeaponsOnLoad { get; set; } = false;
+
 	public Keys GetSlotKey(int slot)
 	{
 		return slot switch {

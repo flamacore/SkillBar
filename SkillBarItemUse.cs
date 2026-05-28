@@ -61,7 +61,7 @@ public static class SkillBarItemUse
 		return true;
 	}
 
-	public static bool TryUseWeapon(Player player, Item bookmark, Vector2 cursorWorld)
+	public static bool TryUseWeapon(Player player, Item bookmark, Vector2 cursorWorld, int slot, SkillBarPlayer sb)
 	{
 		if (player.dead || player.noItems || player.CCed)
 			return false;
@@ -78,50 +78,40 @@ public static class SkillBarItemUse
 
 		AimPlayer(player, cursorWorld);
 
-		bool used = item.shoot > ProjectileID.None
-			? ShootFromInventory(player, item, cursorWorld)
-			: ItemLoader.UseItem(item, player) == true;
+		SkillBarWeaponKind kind = SkillBarWeaponKindClassifier.Classify(item);
+		bool used;
+
+		switch (kind) {
+			case SkillBarWeaponKind.Channel:
+				used = SkillBarChannelUse.TryStart(sb, player, bookmark, slot, cursorWorld);
+				break;
+
+			case SkillBarWeaponKind.MeleeSwing:
+				used = SkillBarMeleeUse.TrySwing(player, item);
+				break;
+
+			case SkillBarWeaponKind.VanillaShoot:
+			case SkillBarWeaponKind.Summon:
+				used = WithTemporaryHeldItem(player, item, held => SkillBarVanillaShoot.TryShoot(player, held));
+				if (!used && kind == SkillBarWeaponKind.Summon)
+					used = WithTemporaryHeldItem(player, item, held => ItemLoader.UseItem(held, player) == true);
+				break;
+
+			default:
+				used = WithTemporaryHeldItem(player, item, held => ItemLoader.UseItem(held, player) == true);
+				break;
+		}
 
 		if (!used)
 			return false;
 
-		if (item.mana > 0)
+		if (!item.channel && item.mana > 0)
 			player.CheckMana(item, -1, pay: true);
 
-		ApplyUseCooldown(player, item);
+		if (!item.channel)
+			ApplyUseCooldown(player, item);
+
 		return true;
-	}
-
-	public static bool ShootFromInventory(Player player, Item item, Vector2 cursorWorld)
-	{
-		if (item.shoot <= ProjectileID.None)
-			return false;
-
-		int projectileType = item.shoot;
-		float shootSpeed = item.shootSpeed;
-		int damage = player.GetWeaponDamage(item);
-		float knockback = player.GetWeaponKnockback(item, item.knockBack);
-		int usedAmmoItemId = 0;
-
-		player.PickAmmo(item, out projectileType, out shootSpeed, out damage, out knockback, out usedAmmoItemId, dontConsume: false);
-
-		if (projectileType <= ProjectileID.None)
-			return false;
-
-		Vector2 position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: true);
-		Vector2 velocity = cursorWorld - position;
-		if (velocity.LengthSquared() < 1f)
-			velocity = new Vector2(player.direction, 0f);
-		velocity.Normalize();
-		velocity *= shootSpeed;
-
-		ItemLoader.ModifyShootStats(item, player, ref position, ref velocity, ref projectileType, ref damage, ref knockback);
-
-		var source = new EntitySource_ItemUse_WithAmmo(player, item, usedAmmoItemId);
-
-		// Spawn directly — do not swap hotbar (avoids double fire with held item).
-		int index = Projectile.NewProjectile(source, position, velocity, projectileType, damage, knockback, player.whoAmI);
-		return index >= 0 && index < Main.maxProjectiles;
 	}
 
 	public static void AimPlayer(Player player, Vector2 cursorWorld)

@@ -93,4 +93,9 @@ SkillBarConfig: {
 		Label: Debug log all skill input
 		Tooltip: Prints a cyan message whenever a skill slot fires (keyboard, menu bind, or mouse).
 	}
+
+	AuditWeaponsOnLoad: {
+		Label: Audit weapons on load (debug)
+		Tooltip: Writes Documents/My Games/Terraria/tModLoader/SkillBar_weapon_audit.txt listing unusual item patterns. Disable after one load.
+	}
 }
