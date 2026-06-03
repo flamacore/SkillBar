@@ -23,6 +23,25 @@ public class SkillBarConfig : ModConfig
 	[DefaultValue(true)]
 	public bool Enabled { get; set; } = true;
 
+	[Header("AppearanceHeader")]
+	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.BarOpacity.Label")]
+	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.BarOpacity.Tooltip")]
+	[Range(0f, 1f)]
+	[Increment(0.05f)]
+	[Slider]
+	[DefaultValue(1f)]
+	public float BarOpacity { get; set; } = 1f;
+
+	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.ShowCooldownOverlay.Label")]
+	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.ShowCooldownOverlay.Tooltip")]
+	[DefaultValue(false)]
+	public bool ShowCooldownOverlay { get; set; } = false;
+
+	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.ShowCooldownChatMessages.Label")]
+	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.ShowCooldownChatMessages.Tooltip")]
+	[DefaultValue(true)]
+	public bool ShowCooldownChatMessages { get; set; } = true;
+
 	[Header("KeybindsHeader")]
 	[LabelKey("$Mods.SkillBar.Configs.SkillBarConfig.ShowKeyLabels.Label")]
 	[TooltipKey("$Mods.SkillBar.Configs.SkillBarConfig.ShowKeyLabels.Tooltip")]

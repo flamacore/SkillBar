@@ -73,23 +73,36 @@ public static class SkillBarUI
 		sb.EnsureDefaultPosition();
 		ClampToScreen(sb);
 
+		SkillBarConfig cfg = SkillBarConfig.Instance;
+		float opacity = MathHelper.Clamp(cfg.BarOpacity, 0f, 1f);
+		if (opacity <= 0f)
+			return;
+
+		Color barTint = Color.White * opacity;
+
 		Texture2D panel = TextureAssets.InventoryBack.Value;
 		Rectangle dragHandle = GetDragHandle(sb);
 
-		spriteBatch.Draw(panel, dragHandle.TopLeft(), new Rectangle(0, 0, 52, 52), Color.White * 0.9f, 0f, Vector2.Zero, DragHandleSize / 52f, SpriteEffects.None, 0f);
-		DrawDragHandleIcon(spriteBatch, dragHandle);
+		spriteBatch.Draw(panel, dragHandle.TopLeft(), new Rectangle(0, 0, 52, 52), barTint * 0.9f, 0f, Vector2.Zero, DragHandleSize / 52f, SpriteEffects.None, 0f);
+		DrawDragHandleIcon(spriteBatch, dragHandle, barTint);
 
 		for (int i = 0; i < SkillBar.SlotCount; i++) {
 			Rectangle slotRect = GetSlotRect(sb, i);
-			spriteBatch.Draw(panel, slotRect.TopLeft(), Color.White);
+			spriteBatch.Draw(panel, slotRect.TopLeft(), barTint);
 
 			Item item = sb.Slots[i];
 			if (!item.IsAir)
-				DrawSlotItem(spriteBatch, item, slotRect);
+				DrawSlotItem(spriteBatch, item, slotRect, barTint);
 
-			if (SkillBarConfig.Instance.ShowKeyLabels) {
+			if (cfg.ShowKeyLabels) {
 				string keyLabel = SkillBarKeybinds.GetDisplayName(i);
-				Utils.DrawBorderString(spriteBatch, keyLabel, slotRect.TopLeft() + new Vector2(2f, 2f), Color.Gray * 0.9f, scale: 0.55f);
+				Utils.DrawBorderString(spriteBatch, keyLabel, slotRect.TopLeft() + new Vector2(2f, 2f), Color.Gray * opacity, scale: 0.55f);
+			}
+
+			if (cfg.ShowCooldownOverlay) {
+				int cooldownFrames = sb.GetSlotCooldownFrames(i);
+				if (cooldownFrames > 0)
+					DrawCooldownOverlay(spriteBatch, slotRect, cooldownFrames, opacity);
 			}
 		}
 
@@ -213,7 +226,7 @@ public static class SkillBarUI
 		SoundEngine.PlaySound(SoundID.Grab);
 	}
 
-	private static void DrawSlotItem(SpriteBatch spriteBatch, Item item, Rectangle slotRect)
+	private static void DrawSlotItem(SpriteBatch spriteBatch, Item item, Rectangle slotRect, Color tint)
 	{
 		Main.instance.LoadItem(item.type);
 		Texture2D texture = TextureAssets.Item[item.type].Value;
@@ -224,16 +237,25 @@ public static class SkillBarUI
 		scale = System.Math.Min(scale, 1f);
 
 		Vector2 center = slotRect.Center.ToVector2();
-		spriteBatch.Draw(texture, center, frame, Color.White, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+		spriteBatch.Draw(texture, center, frame, tint, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
 	}
 
-	private static void DrawDragHandleIcon(SpriteBatch spriteBatch, Rectangle handleRect)
+	private static void DrawCooldownOverlay(SpriteBatch spriteBatch, Rectangle slotRect, int cooldownFrames, float opacity)
+	{
+		int seconds = (cooldownFrames + 59) / 60;
+		string text = seconds > 0 ? seconds.ToString() : cooldownFrames.ToString();
+		Vector2 textSize = FontAssets.MouseText.Value.MeasureString(text) * 0.85f;
+		Vector2 position = slotRect.Center.ToVector2() - textSize * 0.5f;
+		Utils.DrawBorderString(spriteBatch, text, position, Color.White * opacity, scale: 0.85f);
+	}
+
+	private static void DrawDragHandleIcon(SpriteBatch spriteBatch, Rectangle handleRect, Color tint)
 	{
 		Texture2D hand = TextureAssets.Cursors[2].Value;
 		float maxDim = System.Math.Max(hand.Width, hand.Height);
 		float scale = maxDim > 0f ? (DragHandleSize - 6f) / maxDim : 1f;
 		Vector2 center = handleRect.Center.ToVector2();
-		spriteBatch.Draw(hand, center, null, Color.White * 0.95f, 0f, hand.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+		spriteBatch.Draw(hand, center, null, tint * 0.95f, 0f, hand.Size() * 0.5f, scale, SpriteEffects.None, 0f);
 	}
 
 	private static void ReturnItemToInventory(Player player, Item item)

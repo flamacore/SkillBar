@@ -233,7 +233,20 @@ public class SkillBarPlayer : ModPlayer
 
 	public bool IsSlotOnCooldown(int slot)
 	{
-		return slot >= 0 && slot < _slotCooldown.Length && _slotCooldown[slot] > 0;
+		return GetSlotCooldownFrames(slot) > 0;
+	}
+
+	public int GetSlotCooldownFrames(int slot)
+	{
+		return slot >= 0 && slot < _slotCooldown.Length ? _slotCooldown[slot] : 0;
+	}
+
+	private void NotifyCooldownBlocked()
+	{
+		if (Player.whoAmI != Main.myPlayer || !SkillBarConfig.Instance.ShowCooldownChatMessages)
+			return;
+
+		Main.NewText(Language.GetTextValue("Mods.SkillBar.OnCooldown"), Color.Gray);
 	}
 
 	public void SetSlotCooldown(int slot, Item item)
@@ -419,8 +432,7 @@ public class SkillBarPlayer : ModPlayer
 		}
 
 		if (IsSlotOnCooldown(slot)) {
-			if (Player.whoAmI == Main.myPlayer)
-				Main.NewText(Language.GetTextValue("Mods.SkillBar.OnCooldown"), Color.Gray);
+			NotifyCooldownBlocked();
 			return;
 		}
 
@@ -429,8 +441,7 @@ public class SkillBarPlayer : ModPlayer
 		bool isMiningTool = SkillBarToolUse.IsMiningTool(useItem);
 		bool isChannel = SkillBarChannelUse.WantsChannel(useItem);
 		if (!isMiningTool && !isChannel && !isConsumable && !isUsableItem && (Player.itemAnimation > 0 || Player.itemTime > 0)) {
-			if (Player.whoAmI == Main.myPlayer)
-				Main.NewText(Language.GetTextValue("Mods.SkillBar.OnCooldown"), Color.Gray);
+			NotifyCooldownBlocked();
 			return;
 		}
 

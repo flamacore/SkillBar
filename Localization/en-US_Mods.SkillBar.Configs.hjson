@@ -5,8 +5,24 @@ SkillBarConfig: {
 
 	Headers: {
 		GeneralHeader: General
+		AppearanceHeader: Appearance
 		KeybindsHeader: Keybinds
 		InputHeader: Input behavior
+	}
+
+	BarOpacity: {
+		Label: Bar opacity
+		Tooltip: Transparency of the whole item bar (slots, drag handle, key labels, and cooldown numbers). Set to 0% to hide the bar completely (keys still work).
+	}
+
+	ShowCooldownOverlay: {
+		Label: Show cooldown numbers on slots
+		Tooltip: Displays remaining cooldown time on a slot after you use it. Independent of chat messages.
+	}
+
+	ShowCooldownChatMessages: {
+		Label: Show cooldown chat messages
+		Tooltip: Shows "That item is still on cooldown" in chat when you press a slot on cooldown. Turn off to silence those messages only.
 	}
 
 	Enabled: {
