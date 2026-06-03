@@ -17,7 +17,7 @@ SkillBarConfig: {
 
 	ShowCooldownOverlay: {
 		Label: Show cooldown numbers on slots
-		Tooltip: Displays remaining cooldown time on a slot after you use it. Independent of chat messages.
+		Tooltip: Displays remaining cooldown seconds on a slot. The dark cooldown tint on slots always shows while a slot is on cooldown.
 	}
 
 	ShowCooldownChatMessages: {

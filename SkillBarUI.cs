@@ -94,15 +94,16 @@ public static class SkillBarUI
 			if (!item.IsAir)
 				DrawSlotItem(spriteBatch, item, slotRect, barTint);
 
+			int cooldownFrames = sb.GetSlotCooldownFrames(i);
+			if (cooldownFrames > 0) {
+				DrawCooldownDim(spriteBatch, slotRect, opacity);
+				if (cfg.ShowCooldownOverlay)
+					DrawCooldownNumber(spriteBatch, slotRect, cooldownFrames, opacity);
+			}
+
 			if (cfg.ShowKeyLabels) {
 				string keyLabel = SkillBarKeybinds.GetDisplayName(i);
 				Utils.DrawBorderString(spriteBatch, keyLabel, slotRect.TopLeft() + new Vector2(2f, 2f), Color.Gray * opacity, scale: 0.55f);
-			}
-
-			if (cfg.ShowCooldownOverlay) {
-				int cooldownFrames = sb.GetSlotCooldownFrames(i);
-				if (cooldownFrames > 0)
-					DrawCooldownOverlay(spriteBatch, slotRect, cooldownFrames, opacity);
 			}
 		}
 
@@ -240,7 +241,13 @@ public static class SkillBarUI
 		spriteBatch.Draw(texture, center, frame, tint, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
 	}
 
-	private static void DrawCooldownOverlay(SpriteBatch spriteBatch, Rectangle slotRect, int cooldownFrames, float opacity)
+	private static void DrawCooldownDim(SpriteBatch spriteBatch, Rectangle slotRect, float opacity)
+	{
+		Texture2D pixel = TextureAssets.MagicPixel.Value;
+		spriteBatch.Draw(pixel, slotRect, Color.Black * (0.55f * opacity));
+	}
+
+	private static void DrawCooldownNumber(SpriteBatch spriteBatch, Rectangle slotRect, int cooldownFrames, float opacity)
 	{
 		int seconds = (cooldownFrames + 59) / 60;
 		string text = seconds > 0 ? seconds.ToString() : cooldownFrames.ToString();
